@@ -17,15 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Protection Relay Calculator',
+      title: 'Relay Calculator',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: const MyHomePage(title: 'Protection Relay Calculator'),
+      //home: const MyHomePage(title: 'Relay Calculator'),
       initialRoute: '/home',
       routes: {
-        '/home': (context) =>
-            const MyHomePage(title: 'Protection Relay Calculator'),
+        '/home': (context) => const MyHomePage(title: 'Relay Calculator'),
         '/devices': (context) => const DevicesPage(title: 'Devices'),
         '/help': (context) => const HelpPage(title: 'Help'),
         //'/devicedetails': (context) => const DeviceDetailsPage(title: 'Device Details'),
@@ -111,8 +110,8 @@ class MyHomePageState extends State<MyHomePage> {
     setState(() {
       _selectedIndex = index;
       if (_selectedIndex == 0) {
+        if (_selectedIndex != 0) Navigator.of(context).pushNamed('/home');
         _selectedPage = 'Home';
-        Navigator.of(context).pushNamed('/home');
       } else if (_selectedIndex == 1) {
         _selectedPage = 'Devices';
         Navigator.of(context).pushNamed('/devices');
@@ -164,7 +163,8 @@ class MyHomePageState extends State<MyHomePage> {
               title: const Text('Home'),
               onTap: () {
                 setState(() {
-                  Navigator.of(context).pushNamed('/home');
+                  if (_selectedPage != 'Home')
+                    Navigator.of(context).pushNamed('/home');
                   _selectedPage = 'Home';
                   _selectedIndex = 0;
                 });
