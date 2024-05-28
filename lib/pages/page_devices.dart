@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import '../components/grid_ied_archive.dart';
 import '../model/ied.dart';
 import '../model/form_ied.dart';
-import '../components/grid_ied.dart';
 
 class MyDevicesPage extends StatefulWidget with ChangeNotifier {
   MyDevicesPage({
@@ -78,7 +78,7 @@ class _MyDevicesPageState extends State<MyDevicesPage> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
+      /*body: SingleChildScrollView(
         reverse: true,
         child: Container(
           padding: const EdgeInsets.all(20),
@@ -89,14 +89,12 @@ class _MyDevicesPageState extends State<MyDevicesPage> {
                 height: 20,
               ),
               // Lista de IEDs
-              _ieds.isEmpty
-                  ? textReg
-                  : IEDGrid(
-                      listIEDs: _ieds, showOnlyFavorites: _showOnlyFavorites),
+              _ieds.isEmpty ? textReg : const IEDArchiveGrid(),
             ],
           ),
         ),
-      ),
+      ),*/
+      body: const IEDArchiveGrid(),
       backgroundColor: Colors.grey[100],
       persistentFooterAlignment: AlignmentDirectional.center,
     );

@@ -97,7 +97,9 @@ class IEDList with ChangeNotifier {
   }
 
   Future<void> saveIED(Map<String, Object> data) {
-    bool hasId = data['id'] != '' && data['id'] != null;
+    //bool hasId = data['id'] != '' && data['id'] != null;
+    int index = _items.indexWhere((device) => device.id == data['id']);
+    bool hasId = index > -1;
     bool hasIsFavorite = data['isFavorite'] != null;
     bool hasIsArchived = data['isArchived'] != null;
 
@@ -116,8 +118,10 @@ class IEDList with ChangeNotifier {
     );
 
     if (hasId) {
+      notifyListeners();
       return updateIED(ied);
     } else {
+      notifyListeners();
       return addIED(ied);
     }
   }
@@ -137,6 +141,7 @@ class IEDList with ChangeNotifier {
         print(e);
       });
     }
+    notifyListeners();
     return Future.value();
   }
 
@@ -149,19 +154,18 @@ class IEDList with ChangeNotifier {
     } */
     if (index >= 0) {
       _items.removeWhere((device) => device.id == ied.id);
-      removeIEDInFirebase(ied).then((_) {
-        notifyListeners();
-      }).catchError((e) {
+      removeIEDInFirebase(ied).then((_) {}).catchError((e) {
         print(e);
       });
     }
+    notifyListeners();
   }
 
-  List<String> get idsCarrinho {
+  List<String> get idsIEDs {
     return [..._idsIEDs];
   }
 
-  List<IED> get carrinhoItems {
+  List<IED> get iedsItems {
     return _items.where((device) => _idsIEDs.contains(device.id)).toList();
   }
 
@@ -184,10 +188,12 @@ class IEDList with ChangeNotifier {
     } else {
       _idsIEDs.add(id);
     }
+    notifyListeners();
   }
 
-  void removeIdCarrinho(String id) {
+  void removeIdIEDs(String id) {
     _idsIEDs.remove(id);
+    notifyListeners();
   }
 
   void updateIEDList(IED ied) {
@@ -219,6 +225,7 @@ class IEDList with ChangeNotifier {
 
   Future<void> removeIEDInFirebase(IED ied) {
     final url = '$_baseUrl/ieds/${ied.id}.json';
+    notifyListeners();
     return http.delete(Uri.parse(url));
   }
 }

@@ -6,10 +6,16 @@ import '../model/list_ied.dart';
 import '../utils/app_routes.dart';
 
 class IEDItem extends StatelessWidget {
+  final Map<String, Image> _imagens = {
+    "relay": Image.asset(
+      "images/relay.png",
+      fit: BoxFit.cover,
+    ),
+  };
+
   @override
   Widget build(BuildContext context) {
     //PEGANDO CONTEUDO PELO PROVIDER
-    //
     final ied = Provider.of<IED>(
       context,
       listen: false,
@@ -21,8 +27,8 @@ class IEDItem extends StatelessWidget {
     );
 
     //final ied = context.watch<IED>();
-
     var isFavorite = context.select<IED, bool>((ied) => ied.isFavorite);
+    Image imagemRelay = _imagens["relay"]!;
 
     return ClipRRect(
       //corta de forma arredondada o elemento de acordo com o BorderRaius
@@ -51,7 +57,10 @@ class IEDItem extends StatelessWidget {
             onPressed: () {
               //Adicionando metodo ao clique do botão
               ied.toggleArchive();
-              iedsList.updateIEDInFirebase(ied);
+              //iedsList.updateIEDInFirebase(ied);
+              if (!ied.isArchived) {
+                iedsList.removeIED(ied);
+              }
             },
             //Pegando icone se estiver arquivado ou não
             icon: Consumer<IED>(
@@ -70,10 +79,11 @@ class IEDItem extends StatelessWidget {
               ied.imageUrl,
               fit: BoxFit.cover,
             ),*/
-            child: Image.asset(
+            /*child: Image.asset(
               "images/relay.png",
               fit: BoxFit.cover,
-            ),
+            ),*/
+            child: imagemRelay,
             onTap: () {
               Navigator.of(context).pushNamed(AppRoutes.HELP_PAGE,
                   arguments: ied); // Mudar Page para IED_DATAILS_PAGE

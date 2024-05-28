@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '464313419899',
     projectId: 'relay-c4990',
     authDomain: 'relay-c4990.firebaseapp.com',
+    databaseURL: 'https://relay-c4990-default-rtdb.firebaseio.com',
     storageBucket: 'relay-c4990.appspot.com',
     measurementId: 'G-J0T3R8HDQZ',
   );
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:464313419899:android:d30c40e812371ec641fade',
     messagingSenderId: '464313419899',
     projectId: 'relay-c4990',
+    databaseURL: 'https://relay-c4990-default-rtdb.firebaseio.com',
     storageBucket: 'relay-c4990.appspot.com',
   );
 
@@ -63,7 +65,9 @@ class DefaultFirebaseOptions {
     appId: '1:464313419899:ios:61241597a6d5d9c041fade',
     messagingSenderId: '464313419899',
     projectId: 'relay-c4990',
+    databaseURL: 'https://relay-c4990-default-rtdb.firebaseio.com',
     storageBucket: 'relay-c4990.appspot.com',
+    iosClientId: '464313419899-caf7fpkkobbhpf4kl942b4rb0cl5vq0g.apps.googleusercontent.com',
     iosBundleId: 'com.example.projeto01',
   );
 
@@ -72,7 +76,9 @@ class DefaultFirebaseOptions {
     appId: '1:464313419899:ios:61241597a6d5d9c041fade',
     messagingSenderId: '464313419899',
     projectId: 'relay-c4990',
+    databaseURL: 'https://relay-c4990-default-rtdb.firebaseio.com',
     storageBucket: 'relay-c4990.appspot.com',
+    iosClientId: '464313419899-caf7fpkkobbhpf4kl942b4rb0cl5vq0g.apps.googleusercontent.com',
     iosBundleId: 'com.example.projeto01',
   );
 
@@ -82,6 +88,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '464313419899',
     projectId: 'relay-c4990',
     authDomain: 'relay-c4990.firebaseapp.com',
+    databaseURL: 'https://relay-c4990-default-rtdb.firebaseio.com',
     storageBucket: 'relay-c4990.appspot.com',
     measurementId: 'G-QLJM3VFXQV',
   );

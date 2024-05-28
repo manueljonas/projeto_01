@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../components/grid_ied_archive.dart';
 import 'package:provider/provider.dart';
 
 import '../model/ied.dart';
@@ -32,11 +31,6 @@ class _IEDGridState extends State<IEDGrid> {
 
     //PEGANDO CONTEUDO PELO PROVIDER
     //
-    final providerIED = Provider.of<IED>(
-      context,
-      //listen: false,
-    );
-
     final providerIEDList = Provider.of<IEDList>(
       context,
       //listen: false,
@@ -63,7 +57,7 @@ class _IEDGridState extends State<IEDGrid> {
           formData['isFavorite'] = ied.isFavorite;
           formData['isArchived'] = ied.isArchived;
 
-          print('id = ${ied.id}');
+/*          print('id = ${ied.id}');
           print('substationName = ${ied.substationName}');
           print('iedName = ${ied.iedName}');
           print('substationName = ${ied.substationName}');
@@ -73,7 +67,7 @@ class _IEDGridState extends State<IEDGrid> {
           print('operateTime = ${ied.operateTime}');
           print('operationMessage = ${ied.operationMessage}');
           print('isFavorite = ${ied.isFavorite}');
-          print('isArchived = ${ied.isArchived}');
+          print('isArchived = ${ied.isArchived}'); */
         }
       }
     }
@@ -101,7 +95,7 @@ class _IEDGridState extends State<IEDGrid> {
       formData['isFavorite'] = ied.isFavorite;
       formData['isArchived'] = ied.isArchived;
 
-      print('id = ${ied.id}');
+/*      print('id = ${ied.id}');
       print('substationName = ${ied.substationName}');
       print('iedName = ${ied.iedName}');
       print('substationName = ${ied.substationName}');
@@ -111,7 +105,7 @@ class _IEDGridState extends State<IEDGrid> {
       print('operateTime = ${ied.operateTime}');
       print('operationMessage = ${ied.operationMessage}');
       print('isFavorite = ${ied.isFavorite}');
-      print('isArchived = ${ied.isArchived}');
+      print('isArchived = ${ied.isArchived}'); */
       Provider.of<IEDList>(
         context,
         listen: false,
@@ -122,6 +116,10 @@ class _IEDGridState extends State<IEDGrid> {
         //providerIEDList.updateIEDList(ied);
         //providerIEDList.updateIEDInFirebase(ied);
       });
+    }
+
+    void updatePage() {
+      setState(() {});
     }
 
     return SizedBox(
@@ -154,7 +152,7 @@ class _IEDGridState extends State<IEDGrid> {
               // Remove the item from the data source.
               setState(() {
                 widget.listIEDs.removeAt(index);
-                providerIEDList.removeIEDInFirebase(ied);
+                //providerIEDList.removeIED(ied);
               });
               // Then show a snackbar.
               ScaffoldMessenger.of(context)
@@ -236,24 +234,28 @@ class _IEDGridState extends State<IEDGrid> {
                   Column(
                     children: [
                       const Text(
-                        "Arquivar",
+                        "Favoritar",
                         style: TextStyle(color: Colors.red),
                       ),
                       IconButton(
                         onPressed: () {
                           //Adicionando metodo ao clique do botão
-                          ied.toggleArchive();
-                          submitForm(ied);
+                          ied.toggleFavorite();
+                          if (ied.isArchived) {
+                            submitForm(ied);
+                          } else {
+                            updatePage();
+                          }
                         },
-                        //Pegando icone se estiver arquivado ou não
+                        //Pegando icone se estiver favorito ou não
                         /*icon: Consumer<IED>(
-                          builder: (context, ied, child) => Icon(ied.isArchived
-                              ? Icons.archive
-                              : Icons.archive_outlined),
+                          builder: (context, ied, child) => Icon(ied.isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border),
                         ),*/
-                        icon: Icon(ied.isArchived
-                            ? Icons.archive
-                            : Icons.archive_outlined),
+                        icon: Icon(ied.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border),
                         color: Colors.red,
                       ),
                       const Text(
@@ -264,9 +266,38 @@ class _IEDGridState extends State<IEDGrid> {
                         onPressed: () {
                           //Adicionando metodo ao clique do botão
                           //ied.toggleArchive();
-                          submitForm(ied);
+                          if (ied.isArchived) {
+                            submitForm(ied);
+                          }
                         },
                         icon: const Icon(Icons.edit),
+                        color: Colors.red,
+                      ),
+                      const Text(
+                        "Arquivar",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          //Adicionando metodo ao clique do botão
+                          ied.toggleArchive();
+                          if (ied.isArchived) {
+                            submitForm(ied);
+                          } else {
+                            //providerIEDList.removeIED(ied);
+                            widget.listIEDs.removeAt(index);
+                            updatePage();
+                          }
+                        },
+                        //Pegando icone se estiver arquivado ou não
+                        /*icon: Consumer<IED>(
+                          builder: (context, ied, child) => Icon(ied.isArchived
+                              ? Icons.archive
+                              : Icons.archive_outlined),
+                        ),*/
+                        icon: Icon(ied.isArchived
+                            ? Icons.archive
+                            : Icons.archive_outlined),
                         color: Colors.red,
                       ),
                     ],

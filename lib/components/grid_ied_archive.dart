@@ -8,7 +8,7 @@ import '../model/list_ied.dart';
 class IEDArchiveGrid extends StatelessWidget {
   // final bool _showOnlyFavorites;
 
-  const IEDArchiveGrid();
+  const IEDArchiveGrid({super.key});
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<IEDList>(context);
@@ -27,7 +27,7 @@ class IEDArchiveGrid extends StatelessWidget {
       ),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, //2 IEDs por linha
-        childAspectRatio: 3 / 2, //dimensão de cada elemento
+        childAspectRatio: 1 / 1, //dimensão de cada elemento
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),

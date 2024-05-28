@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:projeto_01/model/list_ied.dart';
 import 'package:provider/provider.dart';
 
 import '../components/iecdt.dart';
@@ -7,7 +10,6 @@ import '../components/ieclti.dart';
 import '../components/iecni.dart';
 import '../components/iecvi.dart';
 import '../model/ied.dart';
-import '../model/list_ied.dart';
 
 class FormIED extends StatefulWidget {
   Function(
@@ -34,34 +36,34 @@ class _FormIEDState extends State<FormIED> {
   final _formData = Map<String, Object>();
 
   // Variáveis para os parâmetros do IED
-  final String _id = "";
-  String _substationName = "";
-  String _iedName = "";
+  final String _id = '';
+  String _substationName = '';
+  String _iedName = '';
   double _correnteFalta = 0.0;
   double _correntePickup = 0.0;
   double _tempoAjuste = 0.0;
-  String _padrao = "IECDT";
+  String _padrao = 'IECDT';
   final bool _isFavorite = false;
   final bool _isArchived = false;
 
   // Variáveis para o resultado
   double _tempoAtuacao = 0.0;
-  String _mensagemAtuacao = "";
+  String _mensagemAtuacao = '';
 
   // Função para calcular o tempo de atuação
   void _calcularTempoAtuacao() {
     double t = 0;
-    String mensagem = "";
+    String mensagem = '';
 
-    if (_padrao == "IECDT") {
+    if (_padrao == 'IECDT') {
       t = IECDT().timeToOperate(_correntePickup, _correnteFalta, _tempoAjuste);
-    } else if (_padrao == "IECNI") {
+    } else if (_padrao == 'IECNI') {
       t = IECNI().timeToOperate(_correntePickup, _correnteFalta, _tempoAjuste);
-    } else if (_padrao == "IECVI") {
+    } else if (_padrao == 'IECVI') {
       t = IECVI().timeToOperate(_correntePickup, _correnteFalta, _tempoAjuste);
-    } else if (_padrao == "IECEI") {
+    } else if (_padrao == 'IECEI') {
       t = IECEI().timeToOperate(_correntePickup, _correnteFalta, _tempoAjuste);
-    } else if (_padrao == "IECLTI") {
+    } else if (_padrao == 'IECLTI') {
       t = IECLTI().timeToOperate(_correntePickup, _correnteFalta, _tempoAjuste);
     } else {
       t = double.infinity;
@@ -105,7 +107,13 @@ class _FormIEDState extends State<FormIED> {
   }
 
   void _submitForm() {
-    final id = _id;
+    final provider = Provider.of<IEDList>(context, listen: false);
+    final List<IED> loadIEDs = provider.items;
+
+    //final id = _id;
+    int index = loadIEDs.indexWhere((device) => device.id == _formData['id']);
+    bool hasId = index > -1;
+    final id = hasId ? _id : Random().nextDouble().toString();
     final substationName = _substationName;
     final iedName = _iedName;
     final correnteFalta = _correnteFalta;
