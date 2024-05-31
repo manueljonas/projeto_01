@@ -23,7 +23,7 @@ class IEDArchiveGrid extends StatelessWidget {
         //create: (ctx) => IED(),
         value: loadIEDs[i],
         //child: IEDItem(ied: loadedIEDs[i]),
-        child: IEDItem(),
+        child: IEDItem(listIEDs: loadIEDs),
       ),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, //2 IEDs por linha

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../model/form_ied.dart';
 import '../model/ied.dart';
 import '../model/list_ied.dart';
 import '../pages/page_confirm_dialog.dart';
+import '../pages/page_login.dart';
+import '../utils/app_routes.dart';
 
 class IEDGrid extends StatefulWidget {
   List<IED> listIEDs = [];
@@ -36,42 +39,6 @@ class _IEDGridState extends State<IEDGrid> {
       //listen: false,
     );
 
-    @override
-    void didChangeDependencies() {
-      super.didChangeDependencies();
-
-      if (formData.isEmpty) {
-        final arg = ModalRoute.of(context)?.settings.arguments;
-
-        if (arg != null) {
-          final ied = arg as IED;
-          formData['id'] = ied.id;
-          formData['substationName'] = ied.substationName;
-          formData['iedName'] = ied.iedName;
-          formData['elementFault'] = ied.elementFault;
-          formData['elementPickUp'] = ied.elementPickUp;
-          formData['elementTimeDial'] = ied.elementTimeDial;
-          formData['pattern'] = ied.pattern;
-          formData['operateTime'] = ied.operateTime;
-          formData['operationMessage'] = ied.operationMessage;
-          formData['isFavorite'] = ied.isFavorite;
-          formData['isArchived'] = ied.isArchived;
-
-/*          print('id = ${ied.id}');
-          print('substationName = ${ied.substationName}');
-          print('iedName = ${ied.iedName}');
-          print('substationName = ${ied.substationName}');
-          print('elementFault = ${ied.elementFault}');
-          print('elementPickUp = ${ied.elementPickUp}');
-          print('pattern = ${ied.pattern}');
-          print('operateTime = ${ied.operateTime}');
-          print('operationMessage = ${ied.operationMessage}');
-          print('isFavorite = ${ied.isFavorite}');
-          print('isArchived = ${ied.isArchived}'); */
-        }
-      }
-    }
-
     void submitForm(IED ied) {
 /*    final isValid = _formKey.currentState?.validate() ?? false;
 
@@ -95,31 +62,88 @@ class _IEDGridState extends State<IEDGrid> {
       formData['isFavorite'] = ied.isFavorite;
       formData['isArchived'] = ied.isArchived;
 
-/*      print('id = ${ied.id}');
-      print('substationName = ${ied.substationName}');
-      print('iedName = ${ied.iedName}');
-      print('substationName = ${ied.substationName}');
-      print('elementFault = ${ied.elementFault}');
-      print('elementPickUp = ${ied.elementPickUp}');
-      print('pattern = ${ied.pattern}');
-      print('operateTime = ${ied.operateTime}');
-      print('operationMessage = ${ied.operationMessage}');
-      print('isFavorite = ${ied.isFavorite}');
-      print('isArchived = ${ied.isArchived}'); */
       Provider.of<IEDList>(
         context,
         listen: false,
       ).saveIED(formData).then((value) {
-        //ied.id = providerIED.id;
-        //providerIEDList.saveIED(formData);
-        //providerIEDList.addIED(ied);
-        //providerIEDList.updateIEDList(ied);
-        //providerIEDList.updateIEDInFirebase(ied);
+/*        print('id = ${ied.id}');
+        print('substationName = ${ied.substationName}');
+        print('iedName = ${ied.iedName}');
+        print('elementFault = ${ied.elementFault}');
+        print('elementPickUp = ${ied.elementPickUp}');
+        print('elementTimeDial = ${ied.elementTimeDial}');
+        print('pattern = ${ied.pattern}');
+        print('operateTime = ${ied.operateTime}');
+        print('operationMessage = ${ied.operationMessage}');
+        print('isFavorite = ${ied.isFavorite}');
+        print('isArchived = ${ied.isArchived}'); */
       });
     }
 
     void updatePage() {
       setState(() {});
+    }
+
+    void updateIED(
+      String id,
+      String substationName,
+      String iedName,
+      double elementFault,
+      double elementPickUp,
+      double elementTimeDial,
+      String pattern,
+      double operateTime,
+      String operationMessage,
+      bool isFavorite,
+      bool isArchived,
+    ) {
+      IED ied = IED(
+        id: id,
+        substationName: substationName,
+        iedName: iedName,
+        elementFault: elementFault,
+        elementPickUp: elementPickUp,
+        elementTimeDial: elementTimeDial,
+        pattern: pattern,
+        operateTime: operateTime,
+        operationMessage: operationMessage,
+        isFavorite: isFavorite,
+        isArchived: isArchived,
+      );
+
+      try {
+        for (var i = 0; i < widget.listIEDs.length; i++) {
+          //print('Element index: $i');
+          if (widget.listIEDs[i].substationName == ied.substationName &&
+              widget.listIEDs[i].iedName == ied.iedName) {
+            setState(() {
+              widget.listIEDs[i].elementFault = ied.elementFault;
+              widget.listIEDs[i].elementPickUp = ied.elementPickUp;
+              widget.listIEDs[i].elementTimeDial = ied.elementTimeDial;
+              widget.listIEDs[i].pattern = ied.pattern;
+              widget.listIEDs[i].operateTime = ied.operateTime;
+              widget.listIEDs[i].operationMessage = ied.operationMessage;
+              if (widget.listIEDs[i].isArchived) {
+                submitForm(widget.listIEDs[i]);
+              }
+            });
+          } else {
+            print('Elemento não encontrado na lista!');
+          }
+        }
+      } on Exception catch (e) {
+        print(e);
+      }
+      Navigator.of(context).pop();
+    }
+
+    //Modal
+    void openTaskFormModal(BuildContext context) {
+      showModalBottomSheet(
+          context: context,
+          builder: (_) {
+            return FormIED(updateIED);
+          });
     }
 
     return SizedBox(
@@ -263,13 +287,13 @@ class _IEDGridState extends State<IEDGrid> {
                         style: TextStyle(color: Colors.red),
                       ),
                       IconButton(
-                        onPressed: () {
-                          //Adicionando metodo ao clique do botão
-                          //ied.toggleArchive();
-                          if (ied.isArchived) {
-                            submitForm(ied);
-                          }
-                        },
+                        onPressed: () => (LoginPage().user == null)
+                            ? {
+                                Navigator.of(context).pushNamed(
+                                  AppRoutes.LOGIN_PAGE,
+                                )
+                              }
+                            : openTaskFormModal(context),
                         icon: const Icon(Icons.edit),
                         color: Colors.red,
                       ),
@@ -281,13 +305,13 @@ class _IEDGridState extends State<IEDGrid> {
                         onPressed: () {
                           //Adicionando metodo ao clique do botão
                           ied.toggleArchive();
-                          if (ied.isArchived) {
-                            submitForm(ied);
-                          } else {
-                            //providerIEDList.removeIED(ied);
-                            widget.listIEDs.removeAt(index);
-                            updatePage();
-                          }
+                          //if (ied.isArchived) {
+                          submitForm(ied);
+                          //} else {
+                          //providerIEDList.removeIED(ied);
+                          widget.listIEDs.removeAt(index);
+                          updatePage();
+                          //}
                         },
                         //Pegando icone se estiver arquivado ou não
                         /*icon: Consumer<IED>(

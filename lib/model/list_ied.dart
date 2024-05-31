@@ -15,8 +15,8 @@ class IEDList with ChangeNotifier {
 
   List<IED> get items {
     // get ieds of firebase
-    http.get(Uri.parse('$_baseUrl/ieds.json')).then((response) {
-      final Map<String, dynamic> data = json.decode(response.body);
+    http.get(Uri.parse('$_baseUrl/ieds.json')).then((response) async {
+      final Map<String, dynamic> data = await json.decode(response.body);
       final List<IED> loadIEDs = [];
       data.forEach((id, ied) {
         loadIEDs.add(IED(
@@ -63,6 +63,7 @@ class IEDList with ChangeNotifier {
   Future<void> addIED(IED ied) {
     final future = http.post(Uri.parse('$_baseUrl/ieds.json'),
         body: jsonEncode({
+          //"id": ied.id,
           "substationName": ied.substationName,
           "iedName": ied.iedName,
           "elementFault": ied.elementFault,
@@ -78,7 +79,9 @@ class IEDList with ChangeNotifier {
       //print('espera a requisição acontecer');
       print(jsonDecode(response.body));
       final id = jsonDecode(response.body)['name'];
-      //print(response.statusCode);
+      print(response.statusCode);
+      ied.id = response.body;
+
       _items.add(IED(
         id: id,
         substationName: ied.substationName,
@@ -96,15 +99,40 @@ class IEDList with ChangeNotifier {
     });
   }
 
-  Future<void> saveIED(Map<String, Object> data) {
-    //bool hasId = data['id'] != '' && data['id'] != null;
-    int index = _items.indexWhere((device) => device.id == data['id']);
-    bool hasId = index > -1;
+  Future<void> saveIED(Map<String, Object> data) async {
+    bool hasId = false;
+
+/*    for (var i = 0; i < items.length; i++) {
+      print('Element index: $i');
+      if (items[i].substationName == data['substationName'] &&
+          items[i].iedName == data['iedName']) {
+        hasId = true;
+        print('Elemento encontrado na lista (Firebase)!');
+      } else {
+        hasId = false;
+        print('Elemento não encontrado na lista (Firebase)!');
+      }
+    }*/
+
+    items.forEach(
+      (element) {
+        print('Element: $element');
+        if (element.substationName == data['substationName'] &&
+            element.iedName == data['iedName']) {
+          hasId = true;
+          print('Elemento encontrado na lista (Firebase)!');
+        } else {
+          hasId = false;
+          print('Elemento não encontrado na lista (Firebase)!');
+        }
+      },
+    );
+
     bool hasIsFavorite = data['isFavorite'] != null;
     bool hasIsArchived = data['isArchived'] != null;
 
     final ied = IED(
-      id: hasId ? data['id'] as String : Random().nextDouble().toString(),
+      id: data['id'] as String,
       substationName: data['substationName'] as String,
       iedName: data['iedName'] as String,
       elementFault: data['elementFault'] as double,
@@ -117,11 +145,12 @@ class IEDList with ChangeNotifier {
       isArchived: hasIsArchived ? data['isArchived'] as bool : false,
     );
 
+    print('hasId = $hasId');
     if (hasId) {
-      notifyListeners();
+      //notifyListeners();
       return updateIED(ied);
     } else {
-      notifyListeners();
+      //notifyListeners();
       return addIED(ied);
     }
   }
@@ -129,10 +158,6 @@ class IEDList with ChangeNotifier {
   Future<void> updateIED(IED ied) {
     int index = _items.indexWhere((device) => device.id == ied.id);
 
-/*    if (index >= 0) {
-      _items[index] = ied;
-      notifyListeners();
-    } */
     if (index >= 0) {
       _items[index] = ied;
       updateIEDInFirebase(ied).then((_) {
@@ -209,6 +234,7 @@ class IEDList with ChangeNotifier {
     return http.patch(
       Uri.parse(url),
       body: jsonEncode({
+        //"id": ied.id,
         "substationName": ied.substationName,
         "iedName": ied.iedName,
         "elementFault": ied.elementFault,

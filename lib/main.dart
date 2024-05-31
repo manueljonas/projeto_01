@@ -7,11 +7,13 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'model/ied.dart';
 import 'model/list_ied.dart';
+import 'pages/page_device_detail.dart';
 import 'pages/page_devices.dart';
 import 'pages/page_help.dart';
 import 'pages/page_home.dart';
 import 'pages/page_login.dart';
 import 'utils/app_routes.dart';
+
 //import '../page_devicedetails.dart';
 //import '../page_protectiongraph.dart';
 
@@ -76,9 +78,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.DEVICES_PAGE: (ctx) =>
             MyDevicesPage(title: 'Archived Devices'),
         AppRoutes.HELP_PAGE: (ctx) => const HelpPage(title: 'Help'),
-/*        AppRoutes.DEVICES_DETAILS_PAGE: (ctx) =>
-            const DeviceDetailsPage(title: 'Device Details'),
-        AppRoutes.PROTECTION_GRAPH_PAGE: (ctx) =>
+        AppRoutes.DEVICE_DETAIL_PAGE: (ctx) => DeviceDatailPage(),
+/*        AppRoutes.PROTECTION_GRAPH_PAGE: (ctx) =>
             const ProtectionGraphPage(title: 'Protection Graph'), */
       },
       debugShowCheckedModeBanner: false,

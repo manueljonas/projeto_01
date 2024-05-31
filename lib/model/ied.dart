@@ -4,12 +4,12 @@ class IED with ChangeNotifier {
   String id;
   final String substationName;
   final String iedName;
-  final double elementFault;
-  final double elementPickUp;
-  final double elementTimeDial;
-  final String pattern;
-  final double operateTime;
-  final String operationMessage;
+  double elementFault;
+  double elementPickUp;
+  double elementTimeDial;
+  String pattern;
+  double operateTime;
+  String operationMessage;
   bool isFavorite;
   bool isArchived;
 
@@ -36,4 +36,6 @@ class IED with ChangeNotifier {
     isArchived = !isArchived;
     notifyListeners();
   }
+
+  startsWith(String id) {}
 }
